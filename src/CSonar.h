@@ -4,7 +4,7 @@
 #include "NewPing.h"
 #include <movingAvg.h>
 
-class Sonars
+class CSonar
 {
     private:   
 
@@ -19,7 +19,7 @@ class Sonars
         int _sonarRawData[SONAR_NUM];
         int _sonarAvrData[SONAR_NUM];
 
-        NewPing _sonars[SONAR_NUM] = {
+        NewPing _CSonar[SONAR_NUM] = {
             NewPing(SONAR_1_TRIG_PIN, SONAR_1_ECHO_PIN, SONAR_DIST_MAX),
             NewPing(SONAR_2_TRIG_PIN, SONAR_2_ECHO_PIN, SONAR_DIST_MAX)};
   
@@ -30,8 +30,8 @@ class Sonars
     
     public:
 
-        Sonars();
-        ~Sonars();
+        CSonar();
+        ~CSonar();
 
         void readDistance(uint8_t sonarNum, bool isAverage);
         int getRawDistance(u_int8_t sonarNum){return _sonarRawData[sonarNum];};

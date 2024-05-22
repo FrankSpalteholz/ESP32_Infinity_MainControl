@@ -1,15 +1,15 @@
-#include <Sonars.h>
+#include <CSonar.h>
 
-Sonars::Sonars()
+CSonar::CSonar()
 {
     for (uint8_t i = 0; i < SONAR_NUM; i++)
         _sonarAvrs[i].begin();
 }
 
-Sonars::~Sonars()
+CSonar::~CSonar()
 {}
 
-void Sonars::readDistance(uint8_t sonarNum, bool isAverage)
+void CSonar::readDistance(uint8_t sonarNum, bool isAverage)
 {  
     long tmpDistance;
 
@@ -17,7 +17,7 @@ void Sonars::readDistance(uint8_t sonarNum, bool isAverage)
 
     if(_triggerSetHighTimer > _triggerSetHighTimerDelay)
     {   
-        tmpDistance = _sonars[sonarNum].ping_cm();
+        tmpDistance = _CSonar[sonarNum].ping_cm();
 
         if(tmpDistance > SONAR_DIST_MIN && tmpDistance < SONAR_DIST_MAX)
             _currDistances[sonarNum] = tmpDistance;
@@ -31,7 +31,7 @@ void Sonars::readDistance(uint8_t sonarNum, bool isAverage)
         averageRawData(sonarNum);
 }
 
-void Sonars::averageRawData(uint8_t sonarNum)
+void CSonar::averageRawData(uint8_t sonarNum)
 {
     _sonarAvrData[sonarNum] = _sonarAvrs[sonarNum].reading(_sonarRawData[sonarNum]);
 }

@@ -3,20 +3,11 @@
 #include <SPI.h>
 #include <Wire.h>
 
+#include "Globals.h"
 #include "Images/SqHouseLogo.h"
 
-#define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 64 // OLED display height, in pixels
-#define OLED_RESET -1   //   QT-PY / XIAO
-#define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's
 
-#define I2C2_SDA 25
-#define I2C2_SCL 26
-
-
-
-
-class Lcd_IO
+class CLcd
 {
     private:
         Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
@@ -28,18 +19,18 @@ class Lcd_IO
         void initDataStruct();
 
     public:
-        Lcd_IO(/* args */);
-        ~Lcd_IO();
+        CLcd(/* args */);
+        ~CLcd();
 
         void initDisplay();
         void debugOutputDisplay(int dataOffset, const char* mode, int data[4]);
 };
 
 
-Lcd_IO::Lcd_IO(/* args */) {}
-Lcd_IO::~Lcd_IO() {}
+CLcd::CLcd(/* args */) {}
+CLcd::~CLcd() {}
 
-void Lcd_IO::initDisplay()
+void CLcd::initDisplay()
 {
   
 
@@ -60,7 +51,7 @@ void Lcd_IO::initDisplay()
     display.clearDisplay();
 }
 
-char *Lcd_IO::concatenateCharArrays(char array1[], char array2[], char *concateArray)
+char *CLcd::concatenateCharArrays(char array1[], char array2[], char *concateArray)
 {
  
   strcpy(concateArray, array1);
@@ -70,39 +61,43 @@ char *Lcd_IO::concatenateCharArrays(char array1[], char array2[], char *concateA
   return concateArray;
 }
 
-void Lcd_IO::debugOutputDisplay(int dataOffset, const char* mode, int data[4] )
+void CLcd::debugOutputDisplay(int dataOffset, const char* mode, int data[4] )
 {   
     char cstr[5];
+    char cstr2[5];
+    char cstr_out[10];
     // cursor[0] = 0;
     // cursor[1] = 0;
     // drawOnDisplay(cursor, dataOffset, "[Control]", mode);
     
     itoa(data[0], cstr, 10);
+    itoa(data[1], cstr2, 10);
+    concatenateCharArrays(cstr2, cstr, cstr_out);
     cursor[0] = 0;
     cursor[1] = 15;
-    drawOnDisplay(cursor, dataOffset, "[S1]", cstr);
+    drawOnDisplay(cursor, dataOffset, "[S LR]", cstr_out);
     
-    itoa(data[1], cstr, 10);
-    cursor[0] = 0;
-    cursor[1] = 29;
-    drawOnDisplay(cursor, dataOffset, "[S1 Avr]",cstr);
-
     itoa(data[2], cstr, 10);
     cursor[0] = 0;
-    cursor[1] = 43;
-    drawOnDisplay(cursor, dataOffset, "[S2]", cstr);
+    cursor[1] = 15;
+    drawOnDisplay(cursor, dataOffset + 45, "",cstr);
 
     itoa(data[3], cstr, 10);
     cursor[0] = 0;
-    cursor[1] = 57;
-    drawOnDisplay(cursor, dataOffset, "[S2 Avr]", cstr);
+    cursor[1] = 15;
+    drawOnDisplay(cursor, dataOffset + 65, "", cstr);
+
+    // itoa(data[3], cstr, 10);
+    // cursor[0] = 0;
+    // cursor[1] = 57;
+    // drawOnDisplay(cursor, dataOffset, "[S2 Avr]", cstr);
 
     display.display();
     display.clearDisplay();
 
 }
 
-void Lcd_IO::drawOnDisplay(int cursorPos[2], int offset, const char* label, const char* state) {
+void CLcd::drawOnDisplay(int cursorPos[2], int offset, const char* label, const char* state) {
 
   display.setTextSize(1);
   display.setTextColor(SH110X_WHITE);
