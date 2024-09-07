@@ -29,15 +29,15 @@
 // LED STRIPS
 //#############################################################################
 
-#define LED_PIN_A1      12
+#define LED_PIN_A1      33
 #define LED_PIN_A2      14
-#define LED_PIN_A3      27
-#define LED_PIN_A4      26
+#define LED_PIN_A3      23
+#define LED_PIN_A4      27
 
-#define LED_PIN_B1      25
-#define LED_PIN_B2      33
-#define LED_PIN_B3      32
-#define LED_PIN_B4      4
+#define LED_PIN_B1      32
+#define LED_PIN_B2      12
+#define LED_PIN_B3      25
+#define LED_PIN_B4      26
 
 #define LED_PIN_C1      0
 
@@ -54,12 +54,6 @@
 
 #define LED_STRIP_MAX_BRIGHTNESS 180 //HSV Model
 #define LED_STRIP_MIN_BRIGHTNESS 40
-
-#define LED_STRIP_LOWERBOUND 0
-#define LED_STRIP_UPPERBOUND 64
-
-
-
 
 //#############################################################################
 // OLED 

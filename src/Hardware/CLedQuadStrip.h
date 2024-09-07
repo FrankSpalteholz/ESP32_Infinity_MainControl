@@ -54,7 +54,9 @@ class CLedQuadStrip
         void initLEDStrips();
 
         uint8_t fadeHue(float colorShift, uint8_t startHue, uint8_t endHue);
-        void fadeBrightness(CRGB leds[], uint8_t numLeds, uint8_t startBrightness, uint8_t endBrightness);
+        void fadeBrightness(CRGB leds[], uint8_t numLeds, uint8_t brightness);
+
+        void stripC_startAnim();
 
     private:
 

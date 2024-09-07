@@ -38,33 +38,12 @@ uint8_t CLedQuadStrip::fadeHue(float colorShift, uint8_t startHue, uint8_t endHu
   return startHue + (endHue - startHue) * 0.5 * (1.0 + sin(3.14159 * colorShift)); // Die Sinuswelle variiert von -1 bis 1
 }
 
-void CLedQuadStrip::fadeBrightness(CRGB leds[], uint8_t numLeds, uint8_t startBrightness, uint8_t endBrightness)
+void CLedQuadStrip::fadeBrightness(CRGB leds[], uint8_t numLeds, uint8_t brightness)
 {
-    //for brightness going up
-  if(endBrightness > startBrightness)
-  {
-    for(uint8_t j = startBrightness; j <= endBrightness; j++) 
+   for(uint8_t i = 0; i < numLeds; i++) 
     {
-      for(uint8_t i = 0; i < numLeds; i++) 
-      {
-        leds[i].setHSV( 255, 0, j);
-      }
-      
-      FastLED.show();
+        leds[i].setHSV( 255, 0, brightness);
     }
-  }
-  
-  //for brightness going down
-  if(endBrightness < startBrightness)
-  {
-    for(uint8_t j=startBrightness; j >= endBrightness; j--) 
-    {
-      for(uint8_t i=0; i<numLeds; i++) 
-      {
-        leds[i].setHSV( 255, 0, j);
-      }
-      
-      FastLED.show();
-    }
-  }
+    
+    FastLED.show();
 }
