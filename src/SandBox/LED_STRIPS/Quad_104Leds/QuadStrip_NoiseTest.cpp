@@ -35,8 +35,6 @@
 // uint8_t startHue = 100; // Start-Farbton (Aqua)
 // uint8_t endHue = 213; // End-Farbton (Purple: Aqua + 128)
 
-// bool display_messages = 1;
-// bool display_dimming_index = 1;
 
 // uint8_t calculateHue(float colorShift) {
 //   // Verwende eine Sinuswelle für einen sanften Rücklauf des Farbtons
@@ -56,8 +54,6 @@
 // {
 //   // Generiere 1D Perlin-Noise-Werte und weise sie den LEDs zu
 //   static uint16_t z = 0; // Z-Achsen-Parameter für Perlin Noise (wird für die Animation verwendet)
-
-// //dimming_animation(0, 255, 10);
 
 
 //   EVERY_N_MILLIS(10)

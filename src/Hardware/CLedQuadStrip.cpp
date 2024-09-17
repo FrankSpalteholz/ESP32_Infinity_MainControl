@@ -47,3 +47,71 @@ void CLedQuadStrip::fadeBrightness(CRGB leds[], uint8_t numLeds, uint8_t brightn
     
     FastLED.show();
 }
+
+void CLedQuadStrip::noiseAnim(CRGB leds[], ledStrip stripData, uint8_t numLeds)
+{
+    // Generiere 1D Perlin-Noise-Werte und weise sie den LEDs zu
+  static uint16_t z = 0; // Z-Achsen-Parameter für Perlin Noise (wird für die Animation verwendet)
+
+
+  //EVERY_N_MILLIS(10)
+  //{
+       
+    unsigned long currentTime = millis();
+
+    // Ändere die Geschwindigkeit nach Ablauf des Intervalls
+    if (currentTime - stripData.lastUpdate > stripData.speedChangeInterval) 
+    {
+        stripData.speed = random(stripData.speedMin, stripData.speedMax); // Geschwindigkeit zufällig zwischen 1 und 20 wählen
+        stripData.lastUpdate = currentTime;
+    }
+
+     // Ändere die Skalierung nach Ablauf des Intervalls
+    if (currentTime - stripData.lastUpdate > stripData.scaleChangeInterval) {
+        stripData.scale = random(stripData.scaleMin, stripData.scaleMax); // Skalierung zufällig zwischen 10 und 50 wählen
+        stripData.lastUpdate = currentTime;
+    }
+
+    static float colorShift = 0.0;
+    
+    if (currentTime - stripData.lastUpdate > stripData.colorChangeInterval) {
+        colorShift += 1.0 / (stripData.colorChangeInterval / 10.0); // Inkrementiere den Farbton-Wert
+        if (colorShift >= 1.0) {
+        colorShift = 0.0; // Zurücksetzen, wenn der Wert 1.0 überschreitet
+        }
+        stripData.lastUpdate = currentTime;
+    }
+
+   
+    colorShift += stripData.colorChangeSpeed; // Inkrementiere den Farbton-Wert
+
+    if (colorShift >= 1.0) {
+        colorShift = 0.0; // Zurücksetzen, wenn der Wert 1.0 überschreitet
+    }
+
+    // Berechne den aktuellen Farbton für die Animation
+    uint8_t currentHue = fadeHue(colorShift, stripData.startHue, stripData.endHue);
+
+    //Serial.println(currentHue);
+    // Generiere 1D Perlin-Noise-Werte und weise sie den LEDs zu
+   
+    for (int i = 0; i < numLeds; i++) 
+    {
+        uint8_t noiseValue = inoise8(i * stripData.scale, z);
+        uint8_t brightness = map(noiseValue, 0, 255, 0, 255);
+        leds[i] = CHSV(currentHue, 255, brightness);
+
+    }
+
+    // Schließe den Kreis: Weise dem letzten und ersten LED denselben Noise-Wert zu
+    leds[0] = leds[numLeds - 1];
+
+
+    // Inkrementiere den Z-Wert basierend auf der aktuellen Geschwindigkeit
+    z += stripData.speed;
+
+    FastLED.show();
+
+ // }
+
+}

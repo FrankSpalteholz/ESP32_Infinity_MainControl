@@ -16,28 +16,29 @@
 #define SONAR_4_TRIG_PIN  5
 #define SONAR_4_ECHO_PIN  17
 
-#define SONAR_READ_INTERVAL 30 // in ms
+#define SONAR_READ_INTERVAL 30 
+
 #define SONAR_DIST_MIN 5
-#define SONAR_DIST_MAX 40
+#define SONAR_DIST_MAX 30
 
-#define SONAR_STATE_CHANGE_THRESH 15
-#define SONAR_STATE_COUNTER_MAX 90
+#define SONAR_STATE_CHANGE_THRESH 4
+#define SONAR_RANGE_COUNTER_MAX 250
 
-#define SONAR_DIST_AVERAGE_COUNT 7
+#define SONAR_DIST_AVERAGE_COUNT 4
 
 //#############################################################################
 // LED STRIPS
 //#############################################################################
 
-#define LED_PIN_A1      33
-#define LED_PIN_A2      14
-#define LED_PIN_A3      23
-#define LED_PIN_A4      27
+#define LED_PIN_A1      23
+#define LED_PIN_A2      27
+#define LED_PIN_A3      33
+#define LED_PIN_A4      14
 
-#define LED_PIN_B1      32
-#define LED_PIN_B2      12
-#define LED_PIN_B3      25
-#define LED_PIN_B4      26
+#define LED_PIN_B1      25
+#define LED_PIN_B2      26
+#define LED_PIN_B3      32
+#define LED_PIN_B4      12
 
 #define LED_PIN_C1      0
 
@@ -46,7 +47,7 @@
 #define LED_STRIP_COUNT_A_B     62
 #define LED_STRIP_COUNT_C       104
 
-#define BRIGHTNESS  64
+#define BRIGHTNESS  200
 #define LED_STRIP_TYPE    WS2812B
 #define COLOR_ORDER GRB
 
@@ -68,4 +69,4 @@
 #define I2C2_SDA 21
 #define I2C2_SCL 22
 
-#define SCREEN_UPDATE_INTERVAL 100;
+#define SCREEN_UPDATE_INTERVAL 20;

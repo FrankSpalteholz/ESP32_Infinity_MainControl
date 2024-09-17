@@ -23,27 +23,27 @@ void CSonars::readDistance(uint8_t sonarNum, bool isAverage)
     {
         _currDistances[sonarNum] = tmpDistance;
 
-        if(_distInRangeCounter[sonarNum] > SONAR_STATE_COUNTER_MAX)
-            _distInRangeCounter[sonarNum]=1;
+        if(_distInRangeCounterTmp[sonarNum] > SONAR_RANGE_COUNTER_MAX)
+            _distInRangeCounterTmp[sonarNum]=1;
         else 
-            _distInRangeCounter[sonarNum]++;
+            _distInRangeCounterTmp[sonarNum]++;
 
-        _distOffRangeCounter[sonarNum] = 0;
+        _distOffRangeCounterTmp[sonarNum] = 0;
         
     }
     else
     {
         _currDistances[sonarNum] = _lastDistances[sonarNum];
 
-        if(_distOffRangeCounter[sonarNum] > SONAR_STATE_COUNTER_MAX)
-            _distOffRangeCounter[sonarNum]=1;
+        if(_distOffRangeCounterTmp[sonarNum] > SONAR_RANGE_COUNTER_MAX)
+            _distOffRangeCounterTmp[sonarNum]=1;
         else 
-            _distOffRangeCounter[sonarNum]++;
+            _distOffRangeCounterTmp[sonarNum]++;
 
-        _distInRangeCounter[sonarNum] = 0;
+        _distInRangeCounterTmp[sonarNum] = 0;
     }
     
-    _sonarRawData[sonarNum] = _currDistances[sonarNum];
+    _distRawData[sonarNum] = _currDistances[sonarNum];
 
     if(isAverage)
         averageRawData(sonarNum);
@@ -52,17 +52,56 @@ void CSonars::readDistance(uint8_t sonarNum, bool isAverage)
 
 void CSonars::setDistRangeState(uint8_t sonarNum)
 {
-    if(_distInRangeCounter[sonarNum] == 0 && _distOffRangeCounter[sonarNum] > SONAR_STATE_CHANGE_THRESH)
+    if(_distInRangeCounterTmp[sonarNum] == 0 && _distOffRangeCounterTmp[sonarNum] > SONAR_STATE_CHANGE_THRESH)
     {
         _isDistInRange[sonarNum] = 0;
     }
-     if(_distInRangeCounter[sonarNum] > 0 && _distOffRangeCounter[sonarNum] < SONAR_STATE_CHANGE_THRESH)
+
+    if(_distInRangeCounterTmp[sonarNum] > 0 && _distOffRangeCounterTmp[sonarNum] < SONAR_STATE_CHANGE_THRESH)
     {
         _isDistInRange[sonarNum] = 1;
     }
+
+    setDistRangeCounters(sonarNum);
+
 };
 
 void CSonars::averageRawData(uint8_t sonarNum)
 {
-    _sonarAvrData[sonarNum] = _sonarAvrs[sonarNum].reading(_sonarRawData[sonarNum]);
+    _currDistAvrgData[sonarNum] = _sonarAvrs[sonarNum].reading(_distRawData[sonarNum]);
+    _lastDistAvrgData[sonarNum] = _currDistAvrgData[sonarNum];
 }
+
+void CSonars::setDistRangeCounters(uint8_t sonarNum)
+{
+    if(_isDistInRange[sonarNum] == 0 && _distOffRangeCounterTmp[sonarNum] < SONAR_RANGE_COUNTER_MAX)
+        _distOffRangeCounter[sonarNum]++;
+    
+    if(_isDistInRange[sonarNum] == 0 && _distOffRangeCounterTmp[sonarNum] >= SONAR_RANGE_COUNTER_MAX)
+        _distOffRangeCounter[sonarNum]=1;
+
+    if(_isDistInRange[sonarNum] == 1 && _distInRangeCounterTmp[sonarNum] < SONAR_RANGE_COUNTER_MAX)
+        _distInRangeCounter[sonarNum]++;
+    
+    if(_isDistInRange[sonarNum] == 1 && _distInRangeCounterTmp[sonarNum] >= SONAR_RANGE_COUNTER_MAX)
+        _distInRangeCounter[sonarNum]=1;
+    
+}
+
+void CSonars::calcDistVelocity(uint8_t sonarNum)
+{
+    _distVel[sonarNum] =  _currDistAvrgData[sonarNum] - _lastDistAvrgData[sonarNum];
+}
+
+void CSonars::setPairIDs(uint8_t pairId, uint8_t sonarIds[2])
+{
+    _pairIDs[pairId][0] = sonarIds[0];
+    _pairIDs[pairId][1] = sonarIds[1];
+
+}
+
+void CSonars::setDistLengthBtwSonars(uint8_t lengthID, uint8_t sonarIDs[2])
+{
+    _distLengthBtwSonars[lengthID] = _currDistAvrgData[sonarIDs[0]] + _currDistAvrgData[sonarIDs[1]];
+}
+
